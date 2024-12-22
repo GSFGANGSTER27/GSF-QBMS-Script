@@ -1,0 +1,14 @@
+## Grand Theft Auto Liberty/Vice City Stories (PSP/PS2) - SFX extractor
+## This script will extract sfx audio files from RAW archives.
+## Based on GSF's gta3_sfx_extract.bms
+
+open FDDE "SDT" 1
+
+for i = 0
+    math SFXNUM = i
+    get OFFSET long 1
+    get SIZE long 1
+    get FREQ long 1
+    string NAME p= "sfx%05i.vag" SFXNUM
+    log NAME OFFSET SIZE
+next i
