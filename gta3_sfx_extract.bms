@@ -1,0 +1,46 @@
+## Grand Theft Auto III (PS2) - SFX extractor
+## This script will extract sfx audio files from RAW archives.
+## Based on BloodRaynare's gtasa_sfx_extract.bms.
+## Works for Vice City and Manhunt.
+
+math EXTRACT_RAW = 0 ## Extracts RAW ADPCM files. Put 1 to enable them.
+
+open FDDE "SDT" 1
+
+for i = 0
+    get OFFSET long 1
+    get SIZE long 1
+    get FREQ long 1
+    math SFXNUM = i
+    if EXTRACT_RAW == 1
+        string NAME p= "sfx%05i.raw" SFXNUM
+        log NAME OFFSET SIZE
+    elif EXTRACT_RAW == 0
+        log MEMORY_FILE OFFSET SIZE
+        get SIZE_TMP asize MEMORY_FILE
+        string VAGNAME p= "sfx%05i" SFXNUM
+        callfunction vagheader
+        string NAME p= "sfx%05i.vag" SFXNUM
+        get SIZE_TMP_2 asize MEMORY_FILE2
+        log NAME 0 SIZE_TMP_2 MEMORY_FILE2
+    elif EXTRACT_RAW != 1 && EXTRACT_RAW != 0
+        print "Please put a correct value."
+        cleanexit
+    endif
+next i
+
+startfunction vagheader
+    log MEMORY_FILE2 0 0
+    putDstring "VAGp" 4 MEMORY_FILE2
+    endian big
+    put 0x20 long MEMORY_FILE2
+    put 0 long MEMORY_FILE2
+    put SIZE_TMP long MEMORY_FILE2
+    put FREQ long MEMORY_FILE2
+    putDstring "" 12 MEMORY_FILE2
+    putDstring VAGNAME 16 MEMORY_FILE2
+    endian little
+    append
+    log MEMORY_FILE2 0 SIZE_TMP MEMORY_FILE
+    append
+endfunction
