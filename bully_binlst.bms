@@ -1,0 +1,19 @@
+## Bully (PS2) - BIN sound extractor
+## This script will extracts RSTM files from BIN files.
+
+open FDDE "BIN" 0
+open FDDE "LST" 1
+
+idstring Hash
+get FILES long
+
+for i = 0 < FILES
+   get FILEHASH long
+   get OFFSET long
+   get SIZE long
+   getct NAME string 0x0D 1
+   get TXT byte 1
+   
+   set RSTM string NAME
+   log RSTM OFFSET SIZE
+next i
