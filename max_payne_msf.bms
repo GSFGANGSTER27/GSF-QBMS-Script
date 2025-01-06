@@ -1,0 +1,16 @@
+## Max Payne Mobile (iOS & Android) - sound extractor
+## This script will extract MP3 files from MSF packages.
+
+endian big
+get unknownValue long
+get folderCount long
+get FILES long
+
+for i = 0 < FILES
+   get OFFSET long
+   get SIZE long
+   get name_len byte
+   getdstring NAME name_len
+   set MP3 string NAME
+   log MP3 OFFSET SIZE
+next i
