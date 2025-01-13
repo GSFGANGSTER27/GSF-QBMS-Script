@@ -5,24 +5,28 @@
 
 math EXTRACT_RAW = 0 ## Extracts RAW ADPCM files. Put 1 to enable them.
 
-open FDDE "SDT" 1
+open FDDE "RAW" 1
 
-for i = 0
-    get OFFSET long 1
-    get SIZE long 1
-    get FREQ long 1
+get FILES asize
+
+for CURR_OFF = 0 < FILES
     math SFXNUM = i
+    get OFFSET long
+    get SIZE long
+    get FREQ long
     if EXTRACT_RAW == 1
         string NAME p= "sfx%05i.raw" SFXNUM
-        log NAME OFFSET SIZE
+        log NAME OFFSET SIZE 1
+        savepos CURR_OFF
     elif EXTRACT_RAW == 0
-        log MEMORY_FILE OFFSET SIZE
+        log MEMORY_FILE OFFSET SIZE 1
         get SIZE_TMP asize MEMORY_FILE
         string VAGNAME p= "sfx%05i" SFXNUM
         callfunction vagheader
         string NAME p= "sfx%05i.vag" SFXNUM
         get SIZE_TMP_2 asize MEMORY_FILE2
         log NAME 0 SIZE_TMP_2 MEMORY_FILE2
+        savepos CURR_OFF
     elif EXTRACT_RAW != 1 && EXTRACT_RAW != 0
         print "Please put a correct value."
         cleanexit
